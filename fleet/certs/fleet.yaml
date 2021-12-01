@@ -1,0 +1,19 @@
+# This namespace will be used if other is not specified in Helm chart
+defaultNamespace: cert-manager
+
+# Helm default input values
+helm:
+  chart: file:///workspace/source/charts/cm-certs
+  releaseName: cm-certs
+
+  values:
+    certificates:
+      - name: wildcard-dev
+        duration: 2160h # 90d
+        renewBefore: 480h # 20d
+        dnsNames:
+          - "*.dev-cert.local"
+        issuerRef:
+          name: letsencrypt
+          kind: ClusterIssuer
+          group: cert-manager.io

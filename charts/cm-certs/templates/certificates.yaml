@@ -1,0 +1,23 @@
+{{- range .Values.certificates }}
+apiVersion: {{ .apiVersion | default "cert-manager.io/v1" }}
+kind: Certificate
+metadata:
+  name: {{ .name }}
+spec:
+  secretName: {{ .name }}-secret
+  duration: {{ .duration }}
+  renewBefore: {{ .renewBefore }} 
+  usages:
+    - server auth
+  {{- if .clientUse }}
+    - client auth
+  {{- end }}
+  dnsNames:
+    {{ toYaml .dnsNames | nindent 4 }}
+  issuerRef:
+    name: {{ .issuerRef.name }}
+    kind: {{ .issuerRef.kind }}
+    group: {{ .issuerRef.group }}
+
+---
+{{- end }}
